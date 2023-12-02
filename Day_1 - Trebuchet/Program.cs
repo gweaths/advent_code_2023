@@ -2,24 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-const string FILE_PATH = "./final_input.txt";
-
-const string DIGITS_PATTERN = @"\d";
-const string DIGIT_REPLACEMENT_PATTERN = @"(?<=\d)";
-StringBuilder builder = new StringBuilder();
-
-string OnlyNumerics(string strInput)
-{
-  builder.Clear();
-  foreach (char ch in strInput)
-  {
-    if (char.IsDigit(ch))
-    {
-      builder.Append(ch);
-    }
-  }
-  return builder.ToString();
-}
+string FILE_PATH = "./final_input.txt";
 
 Dictionary<string, string> translations = new(){
       {"one", "one1one"},
@@ -35,42 +18,42 @@ Dictionary<string, string> translations = new(){
 
 string OnlyNumerics(string strInput)
 {
-  builder.Clear();
+  StringBuilder builder = new();
   foreach (char ch in strInput)
   {
-    if (char.IsDigit(ch))
-    {
-      builder.Append(ch);
-    }
+    if (char.IsDigit(ch)) builder.Append(ch);
   }
   return builder.ToString();
 }
 
 string ReplaceNumbers(string original)
 {
-  return Regex.Replace(original, @"(?<=\d)", m => translations[m.Value]);
+  foreach (var key in translations.Keys)
+  {
+    original = original.Replace(key, translations[key].ToString());
+  }
+  return original;
 }
 
 int GetFirstAndLast(string str)
 {
-  return int.Parse(str[0].ToString()) * 10 + int.Parse(str[^1].ToString());
+  int first = int.Parse(str[0].ToString());
+  int last = int.Parse(str[^1].ToString());
+
+  return first * 10 + last; // this converts first digit to a 10th digit e.g 1 = 10, 2 = 20
 }
 
 int Challenge_1()
 {
-  return File.ReadAllLines(FILE_PATH)
-      .Select(OnlyNumerics)
-      .Select(GetFirstAndLast)
-      .Sum();
+  string[] lines = File.ReadAllLines(FILE_PATH);
+  return lines.Select(OnlyNumerics).Select(GetFirstAndLast).Sum();
 }
 
 int Challenge_2()
 {
-  return File.ReadAllLines(FILE_PATH)
-      .Select(ReplaceNumbers)
-      .Select(OnlyNumerics)
-      .Select(GetFirstAndLast)
-      .Sum();
+  string[] lines = File.ReadAllLines(FILE_PATH);
+  string[] replaced = lines.Select(ReplaceNumbers).ToArray();
+  return replaced.Select(OnlyNumerics).Select(GetFirstAndLast).Sum();
 }
 
 Console.WriteLine("Part 1:" + Challenge_1().ToString());
