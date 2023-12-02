@@ -58,5 +58,3 @@ int Challenge_2()
 
 Console.WriteLine("Part 1:" + Challenge_1().ToString());
 Console.WriteLine("Part 2:" + Challenge_2().ToString());
-
-
