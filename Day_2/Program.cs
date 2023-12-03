@@ -1,7 +1,4 @@
-﻿using System.Text;
-using Day_2;
-
-
+﻿using Day_2;
 
 Dictionary<string, int> maxValues = new()
 {
